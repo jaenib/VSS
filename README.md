@@ -1,5 +1,7 @@
 # VSSv1
 
+![VSSv1 preview](assets/hero.png)
+
 VSSv1 is the first milestone in a pipeline for generating architecture floorplans from the Swiss Dwellings dataset. This repo packages the VSSv1 code in a portable, reproducible layout with configurable data/output paths and clear installation steps.
 
 ## What this repo does
@@ -17,6 +19,7 @@ VSSv1 is the first milestone in a pipeline for generating architecture floorplan
 ├─ notebooks/              # Jupyter notebooks for experiments
 ├─ scripts/                # Bash helpers (dataset splitting, renaming)
 ├─ tools/                  # Optional utilities
+├─ assets/                 # Project imagery for docs
 ├─ data/                   # Expected dataset layout (ignored by git)
 ├─ outputs/                # Rendered images (ignored by git)
 ├─ requirements.txt
@@ -69,44 +72,30 @@ If your dataset lives elsewhere, point to it with:
 export VSS_DATA_ROOT=/path/to/data
 ```
 
-## Quickstart
+## Prepare data
 
-1) Recenter geometries (choose the grouping you need).
-
-```
-python -m vssv1.recenter \
-  --group-id floor_id \
-  --plot-sample
-```
-
-This writes a recentered CSV to:
+Run the full preparation pipeline (recenter → render → bounds → xray/contour) with one command:
 
 ```
-data/processed/sdd_recentered/recentered_floor_geometries.csv
+./scripts/prepare_data.sh
 ```
 
-2) Render floorplans from the recentered CSV.
+Defaults match the earlier manual steps:
+
+- `GROUP_ID=floor_id`
+- `START_ROW=0`
+- `END_ROW=200`
+
+You can override any of these:
 
 ```
-python -m vssv1.fp_renderer \
-  --recentered-csv data/processed/sdd_recentered/recentered_floor_geometries.csv \
-  --start-row 0 \
-  --end-row 200 \
-  --outline
+GROUP_ID=floor_id START_ROW=0 END_ROW=200 ./scripts/prepare_data.sh
 ```
 
-3) Compute bounding boxes (optional).
+Disable optional steps if needed (useful for headless runs):
 
 ```
-python -m vssv1.boundaries \
-  --recentered-csv data/processed/sdd_recentered/recentered_floor_geometries.csv \
-  --method percentile
-```
-
-4) Generate xray/contour outputs for the latest render (optional).
-
-```
-python -m vssv1.init_outline --xray --contour
+PLOT_SAMPLE=false OUTLINE=false RUN_BOUNDS=false RUN_XRAY=false ./scripts/prepare_data.sh
 ```
 
 Rendered images are written to:
