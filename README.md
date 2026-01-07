@@ -2,6 +2,13 @@
 
 ![VSSv1 preview](assets/hero.png)
 
+<p align="center">
+  <img src="assets/input_footprint.png" width="22%" alt="Input outline">
+  <img src="assets/target_floorplan.png" width="22%" alt="Target floorplan">
+  <img src="assets/recentered_bounds.png" width="22%" alt="Recentered bounds">
+  <img src="assets/snowflake_bentley.png" width="22%" alt="Snowflake reference">
+</p>
+
 VSSv1 is the data and rendering stage of the 2024 project "Outline to Floorplan", exploring how machine learning can move beyond simply reproducing existing floorplan organization.
 
 ## Project: Outline to Floorplan (2024)
@@ -29,7 +36,7 @@ Snowflakes are used as an external reference because they show rich structural v
 - Render floorplan PNGs from recentered geometries.
 - Generate outline/xray variants of rendered floorplans.
 - Provide notebooks and scripts for dataset preparation and splitting.
- - Focus on data prep for pix2pix style training (training is not in this repo).
+- Focus on data prep for pix2pix style training (training is not in this repo).
 
 ## Repo layout
 
@@ -125,20 +132,6 @@ outputs/fp_png/fp_complete/
 outputs/fp_png/fp_outline/
 outputs/fp_png/fp_xray/
 ```
-
-## Project visuals
-
-| Input outline | Target floorplan |
-| --- | --- |
-| ![Input outline](assets/input_footprint.png) | ![Target floorplan](assets/target_floorplan.png) |
-
-Recentered distribution and the 95 percent bounding square used for training:
-
-![Recentered bounds](assets/recentered_bounds.png)
-
-Snowflake reference used to test external organizational principles:
-
-![Snowflake reference](assets/snowflake_bentley.png)
 
 ## Configuration
 
