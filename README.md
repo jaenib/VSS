@@ -1,5 +1,7 @@
 # VSSv1
 
+![VSSv1 preview](assets/hero.png)
+
 <p align="center">
   <img src="assets/input_footprint.png" width="22%" alt="Input outline">
   <img src="assets/target_floorplan.png" width="22%" alt="Target floorplan">
@@ -192,4 +194,3 @@ MIT License. See `LICENSE`.
 
 
 ![VSSv1 preview](assets/hero.png)
-
