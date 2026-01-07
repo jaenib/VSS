@@ -1,0 +1,4 @@
+line-profiler
+scikit-learn
+seaborn
+osxmetadata

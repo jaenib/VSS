@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vssv1"
+version = "0.1.0"
+description = "VSSv1 floorplan preprocessing and rendering pipeline."
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "Proprietary"}
+
+dependencies = [
+  "numpy",
+  "pandas",
+  "tqdm",
+  "matplotlib",
+  "shapely",
+  "geopandas",
+  "opencv-python",
+  "pillow",
+]
+
+[project.optional-dependencies]
+tools = [
+  "line-profiler",
+  "scikit-learn",
+  "seaborn",
+  "osxmetadata",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
