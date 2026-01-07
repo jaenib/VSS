@@ -1,7 +1,5 @@
 # VSSv1
 
-![VSSv1 preview](assets/hero.png)
-
 <p align="center">
   <img src="assets/input_footprint.png" width="22%" alt="Input outline">
   <img src="assets/target_floorplan.png" width="22%" alt="Target floorplan">
@@ -110,39 +108,59 @@ export VSS_DATA_ROOT=/path/to/data
 export VSS_TRAINING_ROOT=/path/to/training/splits
 ```
 
-## Prepare data
+## Workflow
 
-Run the full preparation pipeline (recenter → render → bounds → xray/contour) with one command:
+1) Prepare floorplan images (recenter -> render -> bounds -> xray/contour).
 
 ```
 ./scripts/prepare_data.sh
 ```
 
-Defaults match the earlier manual steps:
+Defaults: `GROUP_ID=floor_id`, `START_ROW=0`, `END_ROW=200`.
 
-- `GROUP_ID=floor_id`
-- `START_ROW=0`
-- `END_ROW=200`
-
-You can override any of these:
+Override if needed:
 
 ```
 GROUP_ID=floor_id START_ROW=0 END_ROW=200 ./scripts/prepare_data.sh
 ```
 
-Disable optional steps if needed (useful for headless runs):
+Disable optional steps:
 
 ```
 PLOT_SAMPLE=false OUTLINE=false RUN_BOUNDS=false RUN_XRAY=false ./scripts/prepare_data.sh
 ```
 
-Rendered images are written to:
+Rendered images land in:
 
 ```
 outputs/fp_png/fp_complete/
 outputs/fp_png/fp_outline/
 outputs/fp_png/fp_xray/
 ```
+
+2) Build pix2pix training pairs (input | target).
+
+```
+python scripts/make_pix2pix_pairs.py \
+  --input-dir outputs/fp_png/fp_outline \
+  --target-dir outputs/fp_png/fp_complete \
+  --output-dir data/splits/floorplans/paired_FP_HD_512 \
+  --size 512 \
+  --match order
+```
+
+Use `--match name` if filenames already align. Outlines and floorplans use different prefixes, so `order` is typical.
+
+3) Split into train/test folders (optional).
+
+```
+./scripts/split_dataset.sh \
+  data/splits/floorplans/paired_FP_HD_512 \
+  data/splits/floorplans/train_FP_HD_512 \
+  data/splits/floorplans/test_FP_HD_512
+```
+
+4) Train the pix2pix cGAN (see next section).
 
 ## Train (pix2pix cGAN)
 
