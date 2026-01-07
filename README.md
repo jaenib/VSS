@@ -2,7 +2,26 @@
 
 ![VSSv1 preview](assets/hero.png)
 
-VSSv1 is the first milestone in a pipeline for generating architecture floorplans from the Swiss Dwellings dataset. This repo packages the VSSv1 code in a portable, reproducible layout with configurable data/output paths and clear installation steps.
+VSSv1 is the data and rendering stage of the 2024 project "Outline to Floorplan", exploring how machine learning can move beyond simply reproducing existing floorplan organization.
+
+## Project: Outline to Floorplan (2024)
+
+Project by Jan Bauer and Leo Graf. Supervisors: Benjamin Dillenburger and Anton Savov (Chair of Digital Building Technologies).
+
+The Swiss Dwellings dataset provides a large base of residential plans and metadata (view, natural light, noise, and more). We use a pix2pix workflow where the generator translates one pixel constellation into another: footprint outlines in, floorplans out.
+
+Research framing:
+
+- Can spatial organization principles from unrelated fields inspire new architectural layouts?
+- What happens when a generator is trained on hybrid structures that mix logics?
+
+Key representation choices:
+
+- All floorplans are recentered; a uniform square containing 95 percent of samples is used for training.
+- A clean black and white graphic captures walls and openings without fixtures.
+- A second representation assigns gray tones by room type to improve generator performance.
+
+Snowflakes are used as an external reference because they show rich structural variety derived from simple rules. The hybrid dataset mixes snowflakes with floorplans to probe whether the generator can combine logics and produce new spatial behavior rather than replicas.
 
 ## What this repo does
 
@@ -10,6 +29,7 @@ VSSv1 is the first milestone in a pipeline for generating architecture floorplan
 - Render floorplan PNGs from recentered geometries.
 - Generate outline/xray variants of rendered floorplans.
 - Provide notebooks and scripts for dataset preparation and splitting.
+ - Focus on data prep for pix2pix style training (training is not in this repo).
 
 ## Repo layout
 
@@ -106,6 +126,20 @@ outputs/fp_png/fp_outline/
 outputs/fp_png/fp_xray/
 ```
 
+## Project visuals
+
+| Input outline | Target floorplan |
+| --- | --- |
+| ![Input outline](assets/input_footprint.png) | ![Target floorplan](assets/target_floorplan.png) |
+
+Recentered distribution and the 95 percent bounding square used for training:
+
+![Recentered bounds](assets/recentered_bounds.png)
+
+Snowflake reference used to test external organizational principles:
+
+![Snowflake reference](assets/snowflake_bentley.png)
+
 ## Configuration
 
 Environment variables:
@@ -124,8 +158,12 @@ Run notebooks from the repo root so `Path.cwd()` resolves correctly, or set the 
 ## Notes
 
 - `geopandas` may require system dependencies (GDAL/GEOS). If pip installation fails, consider using Conda.
-- The dataset is large; expect multi‑GB storage and long runtimes for full runs.
+- The dataset is large; expect multi-GB storage and long runtimes for full runs.
 
 ## License
 
 MIT License. See `LICENSE`.
+
+## Credits
+
+- Snowflake photography: Wilson A. Bentley.
