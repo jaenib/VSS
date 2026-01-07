@@ -34,7 +34,7 @@ Snowflakes are used as an external reference because they show rich structural v
 - Render floorplan PNGs from recentered geometries.
 - Generate outline/xray variants of rendered floorplans.
 - Provide notebooks and scripts for dataset preparation and splitting.
-- Focus on data prep for pix2pix style training (training is not in this repo).
+- Include pix2pix cGAN training notebooks (TensorFlow), derived from the original tutorial.
 
 ## Repo layout
 
@@ -79,9 +79,9 @@ Optional tools:
 pip install -r requirements-tools.txt
 ```
 
-## Dataset setup
+## Data setup
 
-By default, the code expects the Swiss Dwellings dataset under `data/`:
+Source data (Swiss Dwellings):
 
 ```
 data/
@@ -91,10 +91,21 @@ data/
         geometries.csv
 ```
 
-If your dataset lives elsewhere, point to it with:
+Training data for pix2pix (side-by-side input|target PNGs):
+
+```
+data/
+  splits/
+    floorplans/
+      train_FP_HD_512/
+      test_FP_HD_512/
+```
+
+Set paths with environment variables if your data lives elsewhere:
 
 ```
 export VSS_DATA_ROOT=/path/to/data
+export VSS_TRAINING_ROOT=/path/to/training/splits
 ```
 
 ## Prepare data
@@ -131,17 +142,37 @@ outputs/fp_png/fp_outline/
 outputs/fp_png/fp_xray/
 ```
 
+## Train (pix2pix cGAN)
+
+Training lives in the pix2pix notebooks:
+
+- `notebooks/storey_vss_512.ipynb` (primary, 512x512).
+- `notebooks/storey_vss_256.ipynb` (legacy, 256x256).
+
+Set `dataset_name` and `set_identifyer` in the notebook to match your training folders. Each PNG is a concatenated pair (input | target).
+If you run locally, skip the Colab drive mount cell.
+
+Optional inference helpers use:
+
+- `VSS_INFERENCE_ROOT`: folder with input images for inference.
+- `VSS_INFERENCE_OUTPUT`: output folder for generated videos.
+
 ## Configuration
 
 Environment variables:
 
 - `VSS_DATA_ROOT`: where source/processed data lives (default: `./data`).
 - `VSS_OUTPUT_ROOT`: where output images are written (default: `./outputs`).
+- `VSS_TRAINING_ROOT`: where pix2pix training splits live (default: `./data/splits`).
+- `VSS_INFERENCE_ROOT`: optional input folder for pix2pix inference helpers.
+- `VSS_INFERENCE_OUTPUT`: optional output folder for pix2pix videos.
 - `VSS_REPO_ROOT`: override repo root if running from elsewhere.
 
 ## Notebooks
 
-- `notebooks/01_dwellings_compiler.ipynb`: main exploratory pipeline for recentering + rendering.
+- `notebooks/storey_vss_512.ipynb`: pix2pix cGAN training at 512x512.
+- `notebooks/storey_vss_256.ipynb`: pix2pix cGAN training at 256x256.
+- `notebooks/01_dwellings_compiler.ipynb`: recentering + rendering pipeline.
 - `notebooks/bigDatahandler.ipynb`: image post-processing and dataset splitting helpers.
 
 Run notebooks from the repo root so `Path.cwd()` resolves correctly, or set the environment variables above.
