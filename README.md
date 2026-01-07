@@ -139,4 +139,4 @@ Run notebooks from the repo root so `Path.cwd()` resolves correctly, or set the 
 
 ## License
 
-VSSv1 is intended for internal research use. Add a license if you plan to publish.
+MIT License. See `LICENSE`.
